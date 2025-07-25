@@ -3,4 +3,5 @@
 pip_package: python3-pip
 pip_executable: "{{ 'pip3' if pip_package.startswith('python3') else 'pip' }}"
 
+# Add a list of python packages to install in addition to pip
 pip_install_packages: []
