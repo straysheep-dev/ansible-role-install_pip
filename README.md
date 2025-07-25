@@ -7,6 +7,8 @@ An Ansible Role that installs [pip](https://pip.pypa.io).
 > [!NOTE]
 > **About this Fork**
 >
+> The original source for this role is here: [geerlingguy/ansible-role-pip](https://github.com/geerlingguy/ansible-role-pip)
+>
 > The changes (so far) are mostly matching the formatting of the roles in [straysheep-dev/ansible-configs](https://github.com/straysheep-dev/ansible-configs). Molecule tests will be added again later (after testing and making any necessary adjustments to use across other roles). Additionally, the main task was split off into it's own file for "Linux" systems.
 
 ## Requirements
