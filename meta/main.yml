@@ -3,6 +3,7 @@
 
 galaxy_info:
   role_name: install_pip
+  namespace: straysheep_dev
   author: "geerlingguy, straysheep-dev"
   description: Install pip via the system's package manager.
   license: license (MIT)
