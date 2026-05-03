@@ -1,0 +1,53 @@
+---
+# molecule/default/verify.yml
+# SPDX-License-Identifier: MIT
+
+# The verify.yml file is an optional molecule task that can run
+# checks to confirm the applied configuration works as expected.
+# For example, checking that a web server is running and responds.
+# https://docs.ansible.com/projects/molecule/workflow/?h=#verify
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+    - name: Verify pip3 is executable and returns a version
+      ansible.builtin.command:
+        cmd: pip3 --version
+      register: pip3_version_check
+      changed_when: false
+      failed_when: pip3_version_check.rc != 0
+
+    - name: Assert pip3 version output is present
+      ansible.builtin.assert:
+        that:
+          - pip3_version_check.stdout | length > 0
+        fail_msg: "pip3 --version returned no output"
+        success_msg: "pip3 is installed: {{ pip3_version_check.stdout_lines[0] }}"
+
+    - name: Check requests is installed for user
+      ansible.builtin.command:
+        cmd: pip3 show requests
+      register: requests_check
+      changed_when: false
+      failed_when: requests_check.rc != 0
+
+    - name: Assert requests is installed
+      ansible.builtin.assert:
+        that:
+          - "'requests' in requests_check.stdout"
+        fail_msg: "requests was not found via pip3 show"
+        success_msg: "requests is installed: {{ requests_check.stdout_lines[0] }}"
+
+    - name: Check ansible-lint venv binary exists
+      ansible.builtin.stat:
+        path: "{{ ansible_env.HOME }}/venv/ansible-lint/bin/ansible-lint"
+      register: ansible_lint_venv
+
+    - name: Assert ansible-lint is installed in venv
+      ansible.builtin.assert:
+        that:
+          - ansible_lint_venv.stat.exists
+          - ansible_lint_venv.stat.executable
+        fail_msg: "ansible-lint binary not found in venv at {{ ansible_env.HOME }}/venv/ansible-lint"
+        success_msg: "ansible-lint is installed in venv at {{ ansible_env.HOME }}/venv/ansible-lint"

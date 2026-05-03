@@ -1,5 +1,6 @@
 ---
 # install_pip/meta/main.yml
+# SPDX-License-Identifier: MIT
 
 galaxy_info:
   role_name: install_pip

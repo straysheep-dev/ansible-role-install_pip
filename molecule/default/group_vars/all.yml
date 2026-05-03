@@ -1,0 +1,17 @@
+# SPDX-License-Identifier: MIT
+---
+# molecule/default/group_vars/all.yml
+# Variables injected into the converge play for this scenario.
+# Use this file to avoid modifying converge.yml while preparing
+# unique usage of the role that verify.yml can test.
+
+# https://docs.ansible.com/projects/ansible/latest/inventory_guide/intro_inventory.html#splitting-out-vars
+
+pip_install_packages:
+  - name: requests
+    extra_args: "--user"
+
+  - name: ansible-lint
+    state: present
+    virtualenv: "{{ ansible_env.HOME }}/venv/ansible-lint"
+    virtualenv_command: "{{ ansible_python.executable }} -m venv"

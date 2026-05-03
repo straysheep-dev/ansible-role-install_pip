@@ -1,9 +1,54 @@
+# SPDX-License-Identifier: MIT
 ---
 # install_pip/defaults/main.yml
 
-# For Python 3, use python3-pip.
+# System package used to install pip itself.
+# python3-pip -> derives pip_executable to pip3.
+# python2-pip -> derives pip_executable to pip.
 pip_package: python3-pip
+venv_package: python3-venv
+
+# Set to false to remove /usr/lib/python3.x/EXTERNALLY-MANAGED (PEP 668).
+# Only needed for system-level (and sometimes user-level) pip installs outside a venv.
+# Default is `false` due to issues even with the `--user` arg. Prefer a venv if possible.
+# https://peps.python.org/pep-0668/
+pip_externally_managed: false
+
+# Fallback pip executable for non-venv installs. Derived from pip_package.
+# Override per-item with item.executable for cases like pip2 on Kali,
+# or pip3.13 when multiple interpreters are present.
 pip_executable: "{{ 'pip3' if pip_package.startswith('python3') else 'pip' }}"
 
-# Add a list of python packages to install in addition to pip
 pip_install_packages: []
+# pip_install_packages:
+#
+#   # Minimal, latest package version, user install
+#   - name: requests
+#      extra_args: --user
+#
+#   # Pinned system install using become (PEP 668 override, prefer venv instead)
+#   - name: ansible-lint
+#     version: "24.2.0"
+#     state: present              # present | latest | absent | forcereinstall
+#     umask: "0022"               # octet string; required for readable system-wide installs
+#     break_system_packages: true
+#
+#   # venv install, virtualenv_command requires an absolute path (use ansible_python.executable for this)
+#   - name: scapy
+#     state: present
+#     virtualenv: "{{ ansible_env.HOME }}/venv/scapy"
+#     virtualenv_command: "{{ ansible_python.executable }} -m venv"
+#     virtualenv_site_packages: true   # inherit system packages into venv; default: false
+#
+#   # Legacy Python 2 venv (Kali), virtualenv_command and virtualenv_python are mutually exclusive
+#   - name: some_python2_package
+#     state: present
+#     executable: pip2            # per-item override; ignored when virtualenv is set
+#
+#   # requirements.txt install, mutually exclusive with name; pair with chdir for relative paths
+#   - requirements: /opt/myapp/requirements.txt
+#     chdir: /opt/myapp
+#     virtualenv: /opt/myapp/venv
+#     virtualenv_command: "{{ ansible_python.executable }} -m venv"
+#     extra_args: "--extra-index-url https://my-domain/pypi/myapp"
+#     umask: "0022"               # octet string; required for readable system-wide installs

@@ -1,0 +1,55 @@
+---
+# install_pip/tasks/pip-packages.yml
+
+# https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/pip_module.html
+
+- name: Install python3-venv package (Debian/Ubuntu)
+  ansible.builtin.apt:
+    name: "{{ venv_package }}"
+    state: present
+    update_cache: true
+    cache_valid_time: 3600
+  when: ansible_os_family == 'Debian'
+
+- name: Install pip packages
+  ansible.builtin.pip:
+    # Basic / essential params
+    name: "{{ item.name | default(item) | mandatory }}"
+    version: "{{ item.version | default(omit) }}"
+    state: "{{ item.state | default(omit) }}"
+    extra_args: "{{ item.extra_args | default(omit) }}"
+    chdir: "{{ item.chdir | default(omit) }}"
+
+    # Allow pip to modify an externally-managed Python installation as defined by PEP 668.
+    # This is typically required when installing packages outside a virtual environment
+    # on modern systems.
+    break_system_packages: "{{ item.break_system_packages | default(omit) }}"
+
+    # venv control
+    virtualenv: "{{ item.virtualenv | default(omit) }}"
+    virtualenv_command: "{{ item.virtualenv_command | default(omit) }}"
+    virtualenv_python: "{{ item.virtualenv_python | default(omit) }}"
+    virtualenv_site_packages: "{{ item.virtualenv_site_packages | default(omit) }}"
+
+    # The path to a pip requirements file, which should be local to the remote
+    # system. File can be specified as a relative path if using the chdir option.
+    requirements: "{{ item.requirements | default(omit) }}"
+
+    # The system umask to apply before installing the pip package. Must be an octal string.
+    umask: "{{ item.umask | default(omit) }}"
+
+    # The explicit executable or pathname for the pip executable, if different from the Ansible
+    # Python interpreter. For example pip3.13, if there are multiple Python installations in the
+    # system and you want to run pip for the Python 3.13 installation.
+    #
+    # Mutually exclusive with virtualenv (added in 2.1).
+    # Does not affect the Ansible Python interpreter.
+    #
+    # The setuptools package must be installed for both the Ansible Python interpreter and for the
+    # version of Python specified by this option.
+    #
+    # This filter using a ternary ensures if a virtualenv path is present, this param is skipped.
+    # If there's no virtualenv path, then use the specified pip executable (e.g. pip2 on Kali).
+    # https://docs.ansible.com/projects/ansible/latest/collections/ansible/builtin/ternary_filter.html
+    executable: "{{ item.virtualenv | default(false) | ternary(omit, item.executable | default(pip_executable)) }}"
+  loop: "{{ pip_install_packages }}"

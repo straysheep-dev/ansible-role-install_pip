@@ -4,3 +4,7 @@
 - name: Install pip (Linux)
   ansible.builtin.include_tasks: linux.yml
   when: (ansible_system == "Linux")
+
+- name: Include pip package list
+  ansible.builtin.include_tasks: pip-packages.yml
+  when: pip_install_packages | length > 0
