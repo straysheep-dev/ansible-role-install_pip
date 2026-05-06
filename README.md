@@ -1,6 +1,6 @@
 # install_pip
 
-![ansible-lint workflow](https://github.com/straysheep-dev/ansible-role-install_pip/actions/workflows/ansible-lint.yml/badge.svg)
+![ansible-lint workflow](https://github.com/straysheep-dev/ansible-role-install_pip/actions/workflows/ansible-lint.yml/badge.svg) ![molecule workflow](https://github.com/straysheep-dev/ansible-role-install_pip/actions/workflows/molecule.yml/badge.svg)
 
 An Ansible Role that installs [pip](https://pip.pypa.io), and pip packages.
 
