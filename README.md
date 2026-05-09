@@ -14,13 +14,6 @@ An Ansible Role that installs [pip](https://pip.pypa.io), and pip packages.
 > - Extending the optional variables for `ansible.builtin.pip` under `defaults/main.yml`
 > - Matching the formatting of the roles in [straysheep-dev/ansible-configs](https://github.com/straysheep-dev/ansible-configs).
 
-> [!IMPORTANT]
-> **AI-assisted Authorship**
->
-> Drafts, examples, and research generated using [Claude](https://claude.com/product/overview), both in the web interface and via [Claude Code](https://code.claude.com/docs/en/overview) after ingesting the existing [ansible-configs](https://github.com/straysheep-dev/ansible-configs) codebase and reviewing the direction in a CLAUDE.md file.
->
-> Every file has been reviewed and adjusted as needed by the author.
-
 ## Requirements
 
 On RedHat/CentOS, you may need to have EPEL installed before running this role. You can use the `geerlingguy.repo-epel` role if you need a simple way to ensure it's installed.
@@ -139,3 +132,8 @@ ansible-playbook -i "localhost," -c local --ask-become-pass -v ./playbook-devops
 This role was created in 2017 by [Jeff Geerling](https://www.jeffgeerling.com/), author of [Ansible for DevOps](https://www.ansiblefordevops.com/).
 
 This role was forked to build and learn from in 2025 by [straysheep-dev](https://github.com/straysheep-dev/ansible-configs).
+
+> [!NOTE]
+> **AI-assisted Authorship**
+>
+> Drafts, examples, and research generated using [Claude](https://claude.com/product/overview), both in the web interface and via [Claude Code](https://code.claude.com/docs/en/overview) after ingesting the existing [ansible-configs](https://github.com/straysheep-dev/ansible-configs) codebase and reviewing the direction in a CLAUDE.md file.
